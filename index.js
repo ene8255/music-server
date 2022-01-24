@@ -38,6 +38,7 @@ app.use(express.json());
 app.use(cors());
 
 // 카테고리 가져오기
+// c_group 데이터와 c_group + c_category 데이터 따로 가져오기
 app.get('/categories', async (req, res) => {
     const query = "SELECT DISTINCT c_group FROM categories;" + 
     "SELECT c_group, GROUP_CONCAT(c_category SEPARATOR ',') as lists FROM categories GROUP BY c_group;";
@@ -65,6 +66,28 @@ app.get('/playlist/:id', async (req, res) => {
     connection.query(
         `SELECT * FROM playlists WHERE p_id = ${param.id}`,
         (error, result, fields) => {
+            res.send(result);
+        }
+    )
+})
+
+// 플레이리스트 노래 목록 가져오기
+app.get('/songs/:category', async (req, res) => {
+    const param = req.params;
+    connection.query(
+        `SELECT * FROM songs WHERE s_mood = '${param.category}' OR s_season = '${param.category}' OR s_situation='${param.category}'`,
+        (error, result, fields) => {
+            res.send(result);
+        }
+    )
+})
+
+// 특정 노래 정보 가져오기
+app.get('/song/:id', async (req, res) => {
+    const param = req.params;
+    connection.query(
+        `SELECT * FROM songs WHERE s_id = ${param.id}`,
+        (error, result, fields) => {
             console.log(error);
             console.log(result);
             res.send(result);
@@ -81,12 +104,42 @@ app.post('/image', upload.single('image'), (req, res) => {
     })
 })
 
-// 플레이리스트 테이블에 데이터 추가
+// playlists 테이블에 데이터 추가
 app.post('/playlists', async (req, res) => {
     const { p_name, p_imgUrl, p_desc, p_group, p_category } = req.body; 
 
     connection.query("INSERT INTO playlists(p_name, p_imgUrl, p_desc, p_group, p_category) VALUES(?,?,?,?,?);", 
     [p_name, p_imgUrl, p_desc, p_group, p_category], 
+    function(err, result, fields) {
+        res.send(result);
+    })
+})
+
+// songs 테이블에 데이터 추가
+app.post('/songs', async (req, res) => {
+    const { s_name, s_artist, s_album, s_year, s_time, s_imgUrl, s_season, s_mood, s_situation, s_youtubeUrl } = req.body;
+
+    connection.query("INSERT INTO songs(s_name, s_artist, s_album, s_year, s_time, s_imgUrl, s_season, s_mood, s_situation, s_youtubeUrl) VALUES(?,?,?,?,?,?,?,?,?,?);",
+    [s_name, s_artist, s_album, s_year, s_time, s_imgUrl, s_season, s_mood, s_situation, s_youtubeUrl],
+    function(err, result, fields) {
+        res.send(result);
+    })
+})
+
+// 특정 플레이리스트 수정
+app.put('/playlist/:id', async (req, res) => {
+    const param = req.params;
+    const { p_name, p_imgUrl, p_desc, p_group, p_category } = req.body;
+    connection.query(`UPDATE playlists SET p_name='${p_name}', p_imgUrl='${p_imgUrl}', p_desc='${p_desc}', p_group='${p_group}', p_category='${p_category}' WHERE p_id=${param.id}`, 
+    function(err, result, fields) {
+        res.send(result);
+    })
+})
+
+// 특정 플레이리스트 삭제
+app.delete('/playlist/:id', async (req, res) => {
+    const param = req.params;
+    connection.query(`DELETE FROM playlists WHERE p_id = ${param.id}`,
     function(err, result, fields) {
         res.send(result);
     })
