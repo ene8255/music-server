@@ -136,11 +136,33 @@ app.put('/playlist/:id', async (req, res) => {
     })
 })
 
+// 특정 노래 정보 수정
+app.put('/song/:id', async (req, res) => {
+    const param = req.params;
+    const { s_name, s_artist, s_album, s_year, s_time, s_imgUrl, s_season, s_mood, s_situation, s_youtubeUrl } = req.body;
+
+    connection.query(`UPDATE songs SET s_name='${s_name}', s_artist='${s_artist}', s_album='${s_album}', s_year='${s_year}', s_time='${s_time}', s_imgUrl='${s_imgUrl}', s_season='${s_season}', s_mood='${s_mood}', s_situation='${s_situation}', s_youtubeUrl='${s_youtubeUrl}' WHERE s_id=${param.id}`,
+    function(err, result, fields) {
+        res.send(result);
+    })
+})
+
 // 특정 플레이리스트 삭제
 app.delete('/playlist/:id', async (req, res) => {
     const param = req.params;
     connection.query(`DELETE FROM playlists WHERE p_id = ${param.id}`,
     function(err, result, fields) {
+        res.send(result);
+    })
+})
+
+// 특정 노래 삭제
+app.delete('/song/:id', async (req, res) => {
+    const param = req.params;
+    connection.query(`DELETE FROM songs WHERE s_id = ${param.id}`,
+    function(err, result, fields) {
+        console.log(err);
+        console.log(result);
         res.send(result);
     })
 })
