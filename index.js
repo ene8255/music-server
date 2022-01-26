@@ -88,6 +88,40 @@ app.get('/song/:id', async (req, res) => {
     connection.query(
         `SELECT * FROM songs WHERE s_id = ${param.id}`,
         (error, result, fields) => {
+            res.send(result);
+        }
+    )
+})
+
+// 검색 결과 가져오기
+app.get('/search/:keyword', async (req, res) => {
+    const param = req.params;
+    connection.query(
+        `SELECT * FROM songs WHERE s_name LIKE '%${param.keyword}%' OR s_artist LIKE '%${param.keyword}%' OR s_album LIKE '%${param.keyword}%'`,
+        (error, result, fields) => {
+            res.send(result);
+        }
+    )
+})
+
+// 모든 노래 가져오기**
+app.get('/songs', async (req, res) => {
+    connection.query(
+        'SELECT * FROM songs',
+        (error, result, fields) => {
+            console.log(error);
+            console.log(result);
+            res.send(result);
+        }
+    )
+})
+
+// 랜덤 노래 가져오기
+app.get('/random/:num', async (req, res) => {
+    const param = req.params;
+    connection.query(
+        `SELECT * FROM songs ORDER BY RAND() LIMIT ${param.num}`,
+        (error, result, fields) => {
             console.log(error);
             console.log(result);
             res.send(result);
