@@ -82,6 +82,18 @@ app.get('/songs/:category', async (req, res) => {
     )
 })
 
+// 모든 노래 가져오기
+app.get('/songs', async (req, res) => {
+    connection.query(
+        'SELECT * FROM songs',
+        (error, result, fields) => {
+            console.log(error);
+            console.log(result);
+            res.send(result);
+        }
+    )
+})
+
 // 특정 노래 정보 가져오기
 app.get('/song/:id', async (req, res) => {
     const param = req.params;
@@ -104,30 +116,18 @@ app.get('/search/:keyword', async (req, res) => {
     )
 })
 
-// 모든 노래 가져오기**
-app.get('/songs', async (req, res) => {
-    connection.query(
-        'SELECT * FROM songs',
-        (error, result, fields) => {
-            console.log(error);
-            console.log(result);
-            res.send(result);
-        }
-    )
-})
-
 // 랜덤 노래 가져오기
-app.get('/random/:num', async (req, res) => {
-    const param = req.params;
-    connection.query(
-        `SELECT * FROM songs ORDER BY RAND() LIMIT ${param.num}`,
-        (error, result, fields) => {
-            console.log(error);
-            console.log(result);
-            res.send(result);
-        }
-    )
-})
+// app.get('/random/:num', async (req, res) => {
+//     const param = req.params;
+//     connection.query(
+//         `SELECT * FROM songs ORDER BY RAND() LIMIT ${param.num}`,
+//         (error, result, fields) => {
+//             console.log(error);
+//             console.log(result);
+//             res.send(result);
+//         }
+//     )
+// })
 
 // 이미지 업로드
 app.post('/image', upload.single('image'), (req, res) => {
