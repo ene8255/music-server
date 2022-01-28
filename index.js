@@ -71,17 +71,6 @@ app.get('/playlist/:id', async (req, res) => {
     )
 })
 
-// 플레이리스트 노래 목록 가져오기
-app.get('/songs/:category', async (req, res) => {
-    const param = req.params;
-    connection.query(
-        `SELECT * FROM songs WHERE s_mood = '${param.category}' OR s_season = '${param.category}' OR s_situation='${param.category}'`,
-        (error, result, fields) => {
-            res.send(result);
-        }
-    )
-})
-
 // 모든 노래 가져오기
 app.get('/songs', async (req, res) => {
     connection.query(
@@ -89,6 +78,17 @@ app.get('/songs', async (req, res) => {
         (error, result, fields) => {
             console.log(error);
             console.log(result);
+            res.send(result);
+        }
+    )
+})
+
+// 특정 카테고리의 노래만 가져오기
+app.get('/songs/:category', async (req, res) => {
+    const param = req.params;
+    connection.query(
+        `SELECT * FROM songs WHERE s_mood = '${param.category}' OR s_season = '${param.category}' OR s_situation='${param.category}'`,
+        (error, result, fields) => {
             res.send(result);
         }
     )
