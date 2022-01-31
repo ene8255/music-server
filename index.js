@@ -76,8 +76,6 @@ app.get('/songs', async (req, res) => {
     connection.query(
         'SELECT * FROM songs',
         (error, result, fields) => {
-            console.log(error);
-            console.log(result);
             res.send(result);
         }
     )
@@ -164,6 +162,7 @@ app.post('/songs', async (req, res) => {
 app.put('/playlist/:id', async (req, res) => {
     const param = req.params;
     const { p_name, p_imgUrl, p_desc, p_group, p_category } = req.body;
+
     connection.query(`UPDATE playlists SET p_name='${p_name}', p_imgUrl='${p_imgUrl}', p_desc='${p_desc}', p_group='${p_group}', p_category='${p_category}' WHERE p_id=${param.id}`, 
     function(err, result, fields) {
         res.send(result);
@@ -195,8 +194,6 @@ app.delete('/song/:id', async (req, res) => {
     const param = req.params;
     connection.query(`DELETE FROM songs WHERE s_id = ${param.id}`,
     function(err, result, fields) {
-        console.log(err);
-        console.log(result);
         res.send(result);
     })
 })
