@@ -11,11 +11,11 @@ const parseData = JSON.parse(databaseInfo);
 // mysql 연결
 const mysql = require("mysql");
 const connection = mysql.createConnection({
-    host: parseData.host,
-    user: parseData.user,
-    password: parseData.password,
-    port: parseData.port,
-    database: parseData.database,
+    host: process.env.RDS_ENDPOINT || parseData.host,
+    user: process.env.RDS_USER || parseData.user,
+    password: process.env.RDS_PASSWORD || parseData.password,
+    port: process.env.RDS_PORT || parseData.port,
+    database: process.env.RDS_DB || parseData.database,
     charset : 'utf8mb4',
     multipleStatements: true
 })
