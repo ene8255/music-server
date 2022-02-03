@@ -3,19 +3,31 @@ const cors = require("cors");
 const app = express();
 const port = process.env.PORT || 8080;
 
-// 데이터베이스 정보 가져오기
-const fs = require("fs");
-const databaseInfo = fs.readFileSync("./database.json");
-const parseData = JSON.parse(databaseInfo);
+// 데이터베이스 정보 가져오기 (개발)
+// const fs = require("fs");
+// const databaseInfo = fs.readFileSync("./database.json");
+// const parseData = JSON.parse(databaseInfo);
 
 // mysql 연결
 const mysql = require("mysql");
+// 개발
+// const connection = mysql.createConnection({
+//     host: parseData.host,
+//     user: parseData.user,
+//     password: parseData.password,
+//     port: parseData.port,
+//     database: parseData.database,
+//     charset : 'utf8mb4',
+//     multipleStatements: true
+// })
+
+// 배포
 const connection = mysql.createConnection({
-    host: process.env.RDS_ENDPOINT || parseData.host,
-    user: process.env.RDS_USER || parseData.user,
-    password: process.env.RDS_PASSWORD || parseData.password,
-    port: process.env.RDS_PORT || parseData.port,
-    database: process.env.RDS_DB || parseData.database,
+    host: process.env.RDS_ENDPOINT,
+    user: process.env.RDS_USER,
+    password: process.env.RDS_PASSWORD,
+    port: process.env.RDS_PORT,
+    database: process.env.RDS_DB,
     charset : 'utf8mb4',
     multipleStatements: true
 })
