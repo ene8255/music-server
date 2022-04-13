@@ -16,8 +16,8 @@
 <br/>
 
 - 기능:
-> - 이미지 파일 미리보기, 업로드(POST) → multer 사용
-> - categories 테이블에서 두가지 데이터 따로 가져오기(GET)
-> - playlists 테이블에서 전체/특정 데이터 조회(GET), 등록(POST), 삭제(DELETE), 수정(UPDATE)
-> - songs 테이블에서 전체/특정 데이터 조회(GET), 등록(POST), 삭제(DELETE), 수정(UPDATE)
+  + 이미지 파일 미리보기, 업로드(POST) → multer 사용
+  + categories 테이블에서 두가지 데이터 따로 가져오기(GET)
+  + playlists 테이블에서 전체/특정 데이터 조회(GET), 등록(POST), 삭제(DELETE), 수정(UPDATE)
+  + songs 테이블에서 전체/특정 데이터 조회(GET), 등록(POST), 삭제(DELETE), 수정(UPDATE)
 
