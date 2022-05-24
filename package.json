@@ -10,9 +10,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "aws-sdk": "^2.1141.0",
     "cors": "^2.8.5",
     "express": "^4.17.2",
     "multer": "^1.4.4",
+    "multer-s3": "^2.10.0",
     "mysql": "^2.18.1"
   }
 }

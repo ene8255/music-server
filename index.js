@@ -4,47 +4,69 @@ const app = express();
 const port = process.env.PORT || 8080;
 
 // 데이터베이스 정보 가져오기 (개발)
-// const fs = require("fs");
-// const databaseInfo = fs.readFileSync("./database.json");
-// const parseData = JSON.parse(databaseInfo);
+const fs = require("fs");
+const databaseInfo = fs.readFileSync("./database.json");
+const parseData = JSON.parse(databaseInfo);
 
 // mysql 연결
 const mysql = require("mysql");
 // 개발
-// const connection = mysql.createConnection({
-//     host: parseData.host,
-//     user: parseData.user,
-//     password: parseData.password,
-//     port: parseData.port,
-//     database: parseData.database,
-//     charset : 'utf8mb4',
-//     multipleStatements: true
-// })
-
-// 배포
 const connection = mysql.createConnection({
-    host: process.env.RDS_ENDPOINT,
-    user: process.env.RDS_USER,
-    password: process.env.RDS_PASSWORD,
-    port: process.env.RDS_PORT,
-    database: process.env.RDS_DB,
+    host: parseData.host,
+    user: parseData.user,
+    password: parseData.password,
+    port: parseData.port,
+    database: parseData.database,
     charset : 'utf8mb4',
     multipleStatements: true
 })
 
+// 배포
+// const connection = mysql.createConnection({
+//     host: process.env.RDS_ENDPOINT,
+//     user: process.env.RDS_USER,
+//     password: process.env.RDS_PASSWORD,
+//     port: process.env.RDS_PORT,
+//     database: process.env.RDS_DB,
+//     charset : 'utf8mb4',
+//     multipleStatements: true
+// });
+
+
+// aws-sdk 사용
+const AWS = require("aws-sdk");
+
+// s3 정보 가져오기 (개발)
+const s3Info = fs.readFileSync("./s3.json");
+const parseDataS3 = JSON.parse(s3Info);
+
+AWS.config.update({
+    accessKeyId: parseDataS3.ACCESS_KEY_ID,
+    secretAccessKey: parseDataS3.SECRET_ACCESS_KEY,
+    region: 'us-east-1',
+});
+
+// s3 정보 가져오기 (배포)
+// AWS.config.update({
+//     accessKeyId: process.env.S3_ACCESS_KEY_ID,
+//     secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+//     region: 'us-east-1',
+// });
+
 // 업로드 이미지 관리
-app.use("/upload", express.static("upload"));
+// app.use("/upload", express.static("upload"));
 const multer = require('multer');
+const multerS3 = require('multer-s3');
+
 const upload = multer({
-    storage: multer.diskStorage({
-        destination: function(req, file, cd) {
-            cd(null, 'upload/');
-        },
-        filename: function(req, file, cd) {
-            cd(null, file.originalname);
+    storage: multerS3({
+        s3: new AWS.S3(),
+        bucket: `${parseDataS3.BUCKET_NAME}`,
+        key: function (req, file, cb) {
+            cb(null, `upload/${file.originalname}`);
         }
     })
-})
+});
 
 app.use(express.json());
 app.use(cors());
@@ -144,7 +166,7 @@ app.post('/image', upload.single('image'), (req, res) => {
     const file = req.file;
     console.log(file);
     res.send({
-        imageUrl: file.destination + file.filename
+        imageUrl: file.location
     })
 })
 
