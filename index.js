@@ -82,6 +82,7 @@ const upload = multer({
 
 app.use(express.json());
 app.use(cors());
+app.use(express.static(__dirname + '/public'));
 
 // 카테고리 가져오기
 // c_group 데이터와 c_group + c_category 데이터 따로 가져오기
