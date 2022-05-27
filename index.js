@@ -243,6 +243,11 @@ app.delete('/song/:id', async (req, res) => {
     })
 })
 
+// 페이지 새로고침시 404 에러 방지
+app.get('*', function (req, res){
+    res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
+});
+
 app.listen(port, () => {
     console.log("서버가 돌아가고 있습니다.");
 })
