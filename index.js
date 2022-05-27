@@ -82,7 +82,6 @@ const upload = multer({
 
 app.use(express.json());
 app.use(cors());
-app.use(express.static(__dirname + '/public'));
 
 // 카테고리 가져오기
 // c_group 데이터와 c_group + c_category 데이터 따로 가져오기
@@ -243,11 +242,6 @@ app.delete('/song/:id', async (req, res) => {
         res.send(result);
     })
 })
-
-// 페이지 새로고침시 404 에러 방지
-app.get('*', function (req, res){
-    res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
-});
 
 app.listen(port, () => {
     console.log("서버가 돌아가고 있습니다.");
