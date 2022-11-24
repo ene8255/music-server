@@ -5,16 +5,15 @@
 ![Badge](https://img.shields.io/badge/AmazonAWS-232F3E.svg?&logo=AmazonAWS&logoColor=fff)
 ![Badge](https://img.shields.io/badge/AmazonS3-569A31.svg?&logo=AmazonS3&logoColor=fff)
 ![Badge](https://img.shields.io/badge/MySQL-4479A1.svg?&logo=MySQL&logoColor=fff)
-![Badge](https://img.shields.io/badge/Heroku-430098.svg?&logo=Heroku&logoColor=fff)
 
 ### music-client 사이트 서버
 ---
 - 서버 구축 기간: 9일
-- 서버 주소: https://music-server-i.herokuapp.com/
+- 서버 주소: https://music-server.fly.dev/
 ---
 - Amazon RDS를 이용하여 구축한 MySQL 데이터베이스와 Express를 사용하여 Node.js 서버를 생성하였습니다.
 - 사진 파일 업로드에는 Amazon S3 bucket을 사용하였습니다.
-- 서버 배포는 Heroku를 이용하였습니다.
+- 서버 배포는 Fly.io를 이용하였습니다.
 <br/>
 
 - 기능:
