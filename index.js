@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const port = process.env.PORT || 8080;
+const hostname = process.env.HOSTNAME || '0.0.0.0';
 
 // 데이터베이스 정보 가져오기 (개발)
 // const fs = require("fs");
@@ -243,6 +244,6 @@ app.delete('/song/:id', async (req, res) => {
     })
 })
 
-app.listen(port, () => {
+app.listen(port, hostname, () => {
     console.log("서버가 돌아가고 있습니다.");
 })
